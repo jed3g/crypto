@@ -6,6 +6,7 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
@@ -17,16 +18,15 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.bouncycastle.crypto.CryptoException;
 
 /**
- * Goal which encrypt source files.
+ * Goal which decrypt source files.
  *
  */
-@Mojo(name = "encrypt", defaultPhase = LifecyclePhase.INSTALL)
-public class Encrypt extends AbstractEncrypt {
+@Mojo(name = "decrypt", defaultPhase = LifecyclePhase.VALIDATE)
+public class Decrypt extends AbstractEncrypt {
 	
 	public void execute() throws MojoExecutionException {
 
-		if (decryptedDirectory.exists()) {
-			Path inputDirectoryPath = decryptedDirectory.toPath();
+		if (encryptedDirectory.exists()) {
 			if (passwordFile.exists()) {
 				String password = "";
 				
@@ -44,13 +44,19 @@ public class Encrypt extends AbstractEncrypt {
 				else {
 					encryptor = new Encryptor(password);
 					
-					if (encryptedDirectory.exists()) {
-						removeDirectory(encryptedDirectory);
+					Path inputDirectoryPath = encryptedDirectory.toPath();
+					Path outputDirectoryPath;
+					if (decryptedDirectory.exists()) {
+						outputDirectoryPath = Paths.get(decryptedDirectory.getName() + "2");
+						if(outputDirectoryPath.toFile().exists()) {
+							removeDirectory(outputDirectoryPath.toFile());
+						}
 					}
-					
-					encryptedDirectory.mkdirs();
-					Path outputDirectoryPath = encryptedDirectory.toPath();
-					getLog().info("**** " + inputDirectoryPath + " encrypted into " + outputDirectoryPath);
+					else {
+						outputDirectoryPath = decryptedDirectory.toPath();
+					}
+					outputDirectoryPath.toFile().mkdirs();
+					getLog().info("**** " + inputDirectoryPath + " decrypted into " + outputDirectoryPath);
 					try {
 						Files.walkFileTree(inputDirectoryPath, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
 								new SimpleFileVisitor<Path>() {
@@ -71,15 +77,15 @@ public class Encrypt extends AbstractEncrypt {
 									public FileVisitResult visitFile(Path inFile, BasicFileAttributes attrs)
 											throws IOException {
 										//Files.copy(file, outputDirectoryPath.resolve(inputDirectoryPath.relativize(file)));
-										byte[] encryptedData;
+										byte[] decryptedData;
 										try {
-											encryptedData = encryptor.encrypt(Files.readAllBytes(inFile));
+											decryptedData = encryptor.decrypt(Files.readAllBytes(inFile));
 										} catch (CryptoException e) {
-											encryptedData = new byte[0];
+											decryptedData = new byte[0];
 											getLog().error("Error encoding source File: " + inFile, e);
 										}
 										
-										Files.write(outputDirectoryPath.resolve(inputDirectoryPath.relativize(inFile)), encryptedData);
+										Files.write(outputDirectoryPath.resolve(inputDirectoryPath.relativize(inFile)), decryptedData);
 										
 										return FileVisitResult.CONTINUE;
 									}
@@ -95,7 +101,7 @@ public class Encrypt extends AbstractEncrypt {
 			}
 		}
 		else {
-			getLog().warn("Decrypted Directory: " + decryptedDirectory.getAbsolutePath() + " does not exist!");
+			getLog().warn("Encrypted Directory: " + encryptedDirectory.getAbsolutePath() + " does not exist!");
 		}
 	}
 	
