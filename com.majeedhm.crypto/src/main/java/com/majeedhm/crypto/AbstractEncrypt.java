@@ -1,4 +1,4 @@
-package com.jed3g.crypto;
+package com.majeedhm.crypto;
 
 import java.io.File;
 

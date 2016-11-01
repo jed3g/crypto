@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>com.jed3g</groupId>
+  <groupId>com.majeedhm</groupId>
   <artifactId>cryptoTest</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
@@ -25,7 +25,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.jed3g</groupId>
+      <groupId>com.majeedhm</groupId>
       <artifactId>crypto</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
@@ -34,7 +34,7 @@
     <finalName>cryptoTest</finalName>
     <plugins>
       <plugin>
-        <groupId>com.jed3g</groupId>
+        <groupId>com.majeedhm</groupId>
         <artifactId>crypto</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <!-- executions>

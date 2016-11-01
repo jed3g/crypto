@@ -1,4 +1,4 @@
-package com.jed3g.crypto;
+package com.majeedhm.crypto;
 
 import static org.junit.Assert.*;
 
@@ -10,9 +10,11 @@ import java.nio.file.Files;
 import org.bouncycastle.crypto.CryptoException;
 import org.junit.Test;
 
+import com.majeedhm.crypto.Encryptor;
+
 public class EncryptorTest {
 
-	private Encryptor encryptor = new Encryptor("jed3g");
+	private Encryptor encryptor = new Encryptor("majeedhm");
 	
 	@Test
 	public void testEncryption() {

@@ -1,4 +1,4 @@
-package com.jed3g.crypto;
+package com.majeedhm.crypto;
 
 import org.bouncycastle.crypto.*;
 import org.bouncycastle.crypto.engines.*;
