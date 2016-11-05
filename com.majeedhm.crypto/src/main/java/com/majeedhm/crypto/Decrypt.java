@@ -92,7 +92,6 @@ public class Decrypt extends AbstractEncrypt {
 								});
 					} catch (IOException e) {
 						throw new MojoExecutionException("Error encoding source files!", e);
-					} finally {
 					}
 				}
 			}
